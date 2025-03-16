@@ -24,7 +24,7 @@ const AuthLayout = ({children}) => {
 
           </div>
 
-          <img src={login_bg} alt="BackGround" className='w-48 lg:w-[80%] rounded-3xl absolute bottom-10 shadow-lg z-10' />
+          <img src={login_bg} alt="BackGround" className='transition-all ease-in-out w-64 lg:w-[80%] rounded-3xl absolute bottom-10 shadow-lg z-10' />
         </div>
     </div>
   )
