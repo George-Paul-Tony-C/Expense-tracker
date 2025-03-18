@@ -17,6 +17,11 @@ const SignUp = () => {
     const handleSignUp = async (e) => {
       e.preventDefault();
 
+      if(!fullName){
+        setError("Please enter your name");
+        return;
+      }
+
       if(!validateEmail(email)){
         setError("Please enter a valid email address");
         return;
@@ -29,7 +34,7 @@ const SignUp = () => {
     }
 
   return (
-    <AuthLayout>
+    <AuthLayout >
       <div className='lg:w-[100%] h-auto md:h-full mt-10 md:mt-0 flex flex-col justify-center'>
         <h3 className='text-xl font-semibold text-black'>Create an Account</h3>
         <p className='text-xs text-slate-700 mt-[5px] mb-6'> 
@@ -41,21 +46,24 @@ const SignUp = () => {
           <ProfilePhotoSelector image={profilePic} setImage = {setProfilePic}/>
 
           <div className='grid grid-cols-1 md:grid-cols-2 gap-4 '>
-            <Input
-              value = {fullName}
-              onChange = {({target}) => setFullName(target.value)}
-              type = "text"
-              label = "Full Name"  
-              placeholder = "Eg : George"
-            />
-
-            <Input 
-              value = {email}
-              onChange = {({target}) => setEmail(target.value)}
-              label = "Email Address"
-              placeholder = "geo@gmail.com"
-              type = "text"
-            />
+            <div className='col-span-2 sm:col-span-1'>
+              <Input
+                value = {fullName}
+                onChange = {({target}) => setFullName(target.value)}
+                type = "text"
+                label = "Full Name"  
+                placeholder = "Eg : George"
+              />
+            </div>
+            <div className='col-span-2 sm:col-span-1'>
+              <Input 
+                value = {email}
+                onChange = {({target}) => setEmail(target.value)}
+                label = "Email Address"
+                placeholder = "geo@gmail.com"
+                type = "text"
+              />
+            </div>
             <div className='col-span-2'>
               <Input 
                 value = {password}
@@ -73,7 +81,7 @@ const SignUp = () => {
 
           <p className='text-[13px] text-slate-800 mt-3'>
             Already have an account?{" "}
-            <Link className='font-medium text-primary underline active:scale-105' to="/login">Login</Link>
+            <Link className='font-medium text-primary underline' to="/login">Login</Link>
           </p>
         </form>
       </div>

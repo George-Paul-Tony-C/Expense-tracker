@@ -59,7 +59,7 @@ const Login = () => {
 
           <p className='text-[13px] text-slate-800 mt-3'>
             Don't have an account?{" "}
-            <Link className='font-medium text-primary underline active:font-black' to="/signUp">SignUp</Link>
+            <Link className='font-medium text-primary underline' to="/signUp">SignUp</Link>
           </p>
 
         </form>

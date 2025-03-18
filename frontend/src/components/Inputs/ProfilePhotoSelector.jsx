@@ -6,7 +6,7 @@ const ProfilePhotoSelector = ({image , setImage}) => {
     const [ previewUrl , setPreviewUrl ] = useState(null);
 
     const handleImageChange = (event) => {
-        const file = event.target.files(0);
+        const file = event.target.files[0];
         if(file) {
             setImage(file);
 
@@ -15,7 +15,7 @@ const ProfilePhotoSelector = ({image , setImage}) => {
         }
     }
 
-    const hangleRemoveImage = () => {
+    const handleRemoveImage = () => {
         setImage(null);
         setPreviewUrl(null);
     }
@@ -33,6 +33,32 @@ const ProfilePhotoSelector = ({image , setImage}) => {
             onChange={handleImageChange}
             className='hidden'
         />
+
+        {!image ? (
+            <div className='w-20 h-20 flex items-center justify-center bg-blue-100 rounded-2xl relative group'>
+                <LuUser className='text-4xl text-primary'/>
+
+                <button
+                    type='button'
+                    className='w-8 h-8 flex items-center justify-center bg-primary invisible group-hover:visible text-white rounded-lg absolute -bottom-1 -right-2'
+                    onClick={onChooseFile}
+                >
+                    <LuUpload/>
+                </button>
+
+            </div>   
+        ) : (
+            <div className='relative group'>
+                <img src={previewUrl} alt="profile photo" className='w-20 h-20 rounded-2xl object-cover' />
+                <button 
+                    className='w-8 h-8 flex items-center justify-center bg-red-500 invisible group-hover:visible text-white rounded-lg absolute -bottom-1 -right-2' 
+                    type='button' 
+                    onClick={handleRemoveImage}
+                >
+                    <LuTrash/>
+                </button>
+            </div>
+        )}
     </div>
   )
 }

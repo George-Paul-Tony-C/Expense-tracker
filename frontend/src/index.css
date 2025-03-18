@@ -28,3 +28,5 @@
 .btn-primary {
     @apply w-full text-sm active:scale-95 transition-all ease-in-out font-bold text-white bg-primary shadow-2xl shadow-blue-800/5 p-[10px] rounded-lg my-3 hover:bg-blue-600/20 hover:text-primary
 }
+
+
