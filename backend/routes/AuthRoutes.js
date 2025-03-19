@@ -2,6 +2,7 @@ const express = require("express");
 const { protect } = require('../middleware/authMiddleware.js');
 const { registerUser, loginUser, getUserInfo } = require("../controllers/authControllers.js");
 const upload = require("../middleware/uploadMiddleware.js");
+const { models } = require("mongoose");
 
 const router = express.Router();
 

@@ -4,6 +4,7 @@ const cors = require("cors");
 const path = require("path");
 const connectDB = require('./config/db.js');
 const authRouter = require('./routes/AuthRoutes.js');
+const incomeRouter = require('./routes/IncomeRoutes.js');
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.get('/', (req, res) => {
 
 // Use authentication routes
 app.use("/api/auth", authRouter);
+app.use("/api/income", incomeRouter);
 
 // Serve uploaded files
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
