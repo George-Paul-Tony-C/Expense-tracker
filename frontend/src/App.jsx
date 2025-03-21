@@ -1,36 +1,34 @@
 import './App.css';
-import { BrowserRouter as Router, Routes, Route,Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Auth/Login';
 import SignUp from './pages/Auth/SignUp';
 import Home from './pages/Dashboard/Home';
 import Expense from './pages/Dashboard/Expense';
 import Income from './pages/Dashboard/Income';
-
-
-const Root = () => {
-  const isAuthenticated = !!localStorage.getItem("token");
-
-  return isAuthenticated ? (
-    <Navigate to="/dashboard" />
-  ) : (
-    <Navigate to="/login"/>
-  )
-}
-
-
+import UserProvider from './context/userContext';
+import ProtectedRoute from './ProtectedRoute';  // Import the new component
+import UserInfo from './pages/Auth/UserInfo';
 
 function App() {
   return (
-    <Router>
+    <UserProvider>
+      <Router>
         <Routes>
-          <Route path="/" element={<Root />} />
-          <Route path="/login" exact element={<Login/>}/>
-          <Route path="/signUp" exact element={<SignUp/>} />
-          <Route path="/dashboard" exact element={<Home/>} />
-          <Route path="/income" exact element={<Income/>} />
-          <Route path="/expense" exact element={<Expense/>} />
+          {/* Public Routes */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/signUp" element={<SignUp />} />
+          <Route path="/" element={<Navigate to="/login" />} />
+
+          {/* Protected Routes (Only accessible if logged in) */}
+          <Route element={<ProtectedRoute />}>
+            <Route path="/dashboard" element={<Home />} />
+            <Route path="/userinfo" element={<UserInfo />} />
+            <Route path="/income" element={<Income />} />
+            <Route path="/expense" element={<Expense />} />
+          </Route>
         </Routes>
-    </Router>
+      </Router>
+    </UserProvider>
   );
 }
 

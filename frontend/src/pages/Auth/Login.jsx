@@ -1,72 +1,94 @@
-import React ,{ useState }  from 'react'
-import AuthLayout from '../../components/layouts/AuthLayout'
+import React, { useState } from 'react';
+import AuthLayout from '../../components/layouts/AuthLayout';
 import { Link, useNavigate } from 'react-router-dom';
 import Input from '../../components/Inputs/Input';
 import { validateEmail } from '../../utils/helper.js';
-
+import axiosInstance from '../../utils/axiosInstance'; // Use axios instance for API calls
+import { API_PATHS } from '../../utils/apiPaths';
 
 const Login = () => {
-
-  const [ email , setEmail ] = useState("");
-  const [ password , setPassword ] = useState("");
-  const [ error , setError ] = useState(null);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    if(!validateEmail(email)){
-      setError("Please enter a valid email address");
+    if (!validateEmail(email)) {
+      setError('Please enter a valid email address');
       return;
     }
 
-    if(!password){
-      setError("Please enter the password");
+    if (!password) {
+      setError('Please enter the password');
       return;
     }
 
-    setError("");
-  }
+    setError('');
+    setLoading(true);
+
+    try {
+      const response = await axiosInstance.post(API_PATHS.AUTH.LOGIN, {
+        email,
+        password,
+      });
+
+      if (response.data?.token) {
+        localStorage.setItem('token', response.data.token); // Store token
+        navigate('/dashboard'); // Redirect to dashboard
+      } else {
+        setError('Invalid credentials. Please try again.');
+      }
+    } catch (err) {
+      setError(err.response?.data?.message || 'Something went wrong. Try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <AuthLayout>
-      <div className='lg:w-[70%] h-3/4 md:h-full flex flex-col justify-center'>
-        <h3 className='text-xl font-bold text-black'>Welcome Back</h3>
-        <p className='text-xs text-slate-700 mt-[5px] mb-6'>
-          Please entry your details to login.
+      <div className="lg:w-[70%] h-3/4 md:h-full flex flex-col justify-center">
+        <h3 className="text-xl font-bold text-black">Welcome Back</h3>
+        <p className="text-xs text-slate-700 mt-[5px] mb-6">
+          Please enter your details to login.
         </p>
 
         <form onSubmit={handleLogin}>
-          <Input 
-            value = {email}
-            onChange = {({target}) => setEmail(target.value)}
-            label = "Email Address"
-            placeholder = "geo@gmail.com"
-            type = "text"
+          <Input
+            value={email}
+            onChange={({ target }) => setEmail(target.value)}
+            label="Email Address"
+            placeholder="geo@gmail.com"
+            type="email"
           />
-          <Input 
-            value = {password}
-            onChange = {({target}) => setPassword(target.value)}
-            label = "Password"
-            placeholder = "*******"
-            type = "password"
+          <Input
+            value={password}
+            onChange={({ target }) => setPassword(target.value)}
+            label="Password"
+            placeholder="*******"
+            type="password"
           />
 
-          {error && <p className='text-red-500 text-xs pb-2.5'>{error}</p>}
+          {error && <p className="text-red-500 text-xs pb-2.5">{error}</p>}
 
-          <button type='submit' className='btn-primary'> LOGIN </button>
+          <button type="submit" className="btn-primary" disabled={loading}>
+            {loading ? 'Logging in...' : 'LOGIN'}
+          </button>
 
-          <p className='text-[13px] text-slate-800 mt-3'>
-            Don't have an account?{" "}
-            <Link className='font-medium text-primary underline' to="/signUp">SignUp</Link>
+          <p className="text-[13px] text-slate-800 mt-3">
+            Don't have an account?{' '}
+            <Link className="font-medium text-primary underline" to="/signUp">
+              Sign Up
+            </Link>
           </p>
-
         </form>
-
       </div>
     </AuthLayout>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;

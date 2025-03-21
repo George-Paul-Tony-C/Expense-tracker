@@ -5,8 +5,12 @@ const path = require("path");
 const connectDB = require('./config/db.js');
 const authRouter = require('./routes/AuthRoutes.js');
 const incomeRouter = require('./routes/IncomeRoutes.js');
+const expenseRouter = require('./routes/ExpenseRoutes.js');
+const dashboardRouter = require('./routes/DashboardRoutes.js');
 
 const app = express();
+
+app.options('*', cors());  // Allow pre-flight OPTIONS request for all routes
 
 // CORS setup
 app.use(
@@ -31,10 +35,12 @@ app.get('/', (req, res) => {
 // Use authentication routes
 app.use("/api/auth", authRouter);
 app.use("/api/income", incomeRouter);
+app.use("/api/expense", expenseRouter);
+app.use("/api/dashboard", dashboardRouter);
 
 // Serve uploaded files
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Set up the port and start the server
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
