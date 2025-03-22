@@ -5,6 +5,8 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { TbLayoutDashboardFilled } from "react-icons/tb";
 import axiosInstance from '../../utils/axiosInstance';
 import { API_PATHS } from '../../utils/apiPaths';
+import { useContext } from 'react';
+import { UserContext } from '../../context/userContext';
 
 const UserInfo = () => {
   const [user, setUser] = useState(null);
@@ -12,24 +14,37 @@ const UserInfo = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate(); 
 
+  const { clearUser } = useContext(UserContext);
+
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await axiosInstance.get(API_PATHS.AUTH.GET_USER);
-        setUser(res.data);
-      } catch (err) {
-        setError(err.response?.data?.message || 'Failed to load user data');
-        navigate('/login');
-      } finally {
+    const storedUser = localStorage.getItem("user");
+
+    if (storedUser) {
+        setUser(JSON.parse(storedUser));
         setLoading(false);
-      }
-    };
-  
-    fetchUser();
+    } else {
+        // Fetch from API if not in localStorage
+        const fetchUser = async () => {
+            try {
+                const res = await axiosInstance.get(API_PATHS.AUTH.GET_USER_INFO);
+                setUser(res.data);
+                localStorage.setItem("user", JSON.stringify(res.data)); // Save fetched user data
+            } catch (err) {
+                setError(err.response?.data?.message || 'Failed to load user data');
+                navigate('/login');
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchUser();
+    }
   }, [navigate]);
+
+
 
   const handleLogout = () => {
     localStorage.removeItem('token');
+    clearUser();
     navigate('/login');
   };
 

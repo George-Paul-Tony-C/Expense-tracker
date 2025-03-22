@@ -3,12 +3,13 @@ const jwt = require("jsonwebtoken");
 
 // Generate JWT token
 const generateToken = (id) => {
-    return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+    return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "10h" });
 };
 
 // Register user
 exports.registerUser = async (req, res) => {
-    const { fullName, email, password, profileImageUrl } = req.body;
+    const { fullName, email, password , profileImageUrl } = req.body;
+    
 
     if (!fullName || !email || !password) {
         return res.status(400).json({ message: "All fields are required" });
@@ -24,7 +25,7 @@ exports.registerUser = async (req, res) => {
             fullName,
             email,
             password,
-            profileImageUrl,
+            profileImageUrl, // Store the image URL here
         });
 
         res.status(201).json({
@@ -36,6 +37,7 @@ exports.registerUser = async (req, res) => {
         res.status(500).json({ message: "Error registering user", error: error.message });
     }
 };
+
 
 // Login user (for now, just a placeholder)
 exports.loginUser = async (req, res) => {

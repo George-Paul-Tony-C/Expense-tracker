@@ -5,13 +5,17 @@ import Input from '../../components/Inputs/Input';
 import { validateEmail } from '../../utils/helper.js';
 import axiosInstance from '../../utils/axiosInstance'; // Use axios instance for API calls
 import { API_PATHS } from '../../utils/apiPaths';
+import { useContext } from 'react';
+import { UserContext } from '../../context/userContext.jsx';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-
+  const { updateUser } = useContext(UserContext);
+  
+  
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -36,8 +40,11 @@ const Login = () => {
         password,
       });
 
-      if (response.data?.token) {
+      const { token , user } = response.data;
+
+      if (token) {
         localStorage.setItem('token', response.data.token); // Store token
+        updateUser(user)
         navigate('/dashboard'); // Redirect to dashboard
       } else {
         setError('Invalid credentials. Please try again.');

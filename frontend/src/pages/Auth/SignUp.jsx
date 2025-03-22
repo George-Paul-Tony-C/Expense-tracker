@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState ,  useContext  } from 'react';
 import AuthLayout from '../../components/layouts/AuthLayout';
 import { Link, useNavigate } from 'react-router-dom';
 import Input from '../../components/Inputs/Input';
@@ -6,6 +6,8 @@ import ProfilePhotoSelector from '../../components/Inputs/ProfilePhotoSelector.j
 import { validateEmail } from '../../utils/helper.js';
 import axiosInstance from '../../utils/axiosInstance';
 import { API_PATHS } from '../../utils/apiPaths';
+import { UserContext } from '../../context/userContext.jsx';
+import { uploadImage } from '../../utils/uploadImage.js';
 
 const SignUp = () => {
   const [profilePic, setProfilePic] = useState(null);
@@ -14,7 +16,9 @@ const SignUp = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  
+
+  const { updateUser } = useContext(UserContext);
+
   const navigate = useNavigate();
 
   const handleSignUp = async (e) => {
@@ -39,20 +43,33 @@ const SignUp = () => {
     setLoading(true);
 
     try {
+      let profileImageUrl = "";
+
+      // If there is a profile picture, upload it
+      if (profilePic) {
+        const uploadedImage = await uploadImage(profilePic);
+        profileImageUrl = uploadedImage?.imageUrl; // Assume the response contains the imageUrl
+      }
+
       // Prepare form data for API request
       const formData = new FormData();
       formData.append('fullName', fullName);
       formData.append('email', email);
       formData.append('password', password);
       if (profilePic) {
-        formData.append('profilePic', profilePic);
+        formData.append('profileImageUrl', profileImageUrl); // Send actual file, not URL
       }
+      
+      
 
       // Send signup request
       const response = await axiosInstance.post(API_PATHS.AUTH.REGISTER, formData);
 
-      if (response.data?.token) {
-        localStorage.setItem('token', response.data.token); // Store token
+      const { token, user } = response.data;
+
+      if (token) {
+        localStorage.setItem('token', token); // Store token
+        updateUser(user);
         navigate('/dashboard'); // Redirect to dashboard
       } else {
         setError('Signup failed. Please try again.');
@@ -63,6 +80,7 @@ const SignUp = () => {
       setLoading(false);
     }
   };
+
 
   return (
     <AuthLayout>

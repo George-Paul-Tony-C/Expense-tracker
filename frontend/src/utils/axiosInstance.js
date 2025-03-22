@@ -14,13 +14,13 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   (config) => {
     const accessToken = localStorage.getItem("token");
-    console.log("Access Token:", accessToken);
+    // console.log("Access Token:", accessToken);
 
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
     }
 
-    console.log("Outgoing Request:", config);
+    // console.log("Outgoing Request:", config);
     return config;
   },
   (error) => {
@@ -31,7 +31,7 @@ axiosInstance.interceptors.request.use(
 
 axiosInstance.interceptors.response.use(
   (response) => {
-    console.log("Response Received:", response);
+    // console.log("Response Received:", response);
     return response;
   },
   (error) => {
