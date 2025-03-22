@@ -6,7 +6,7 @@ const DashboardLayout = ({ children}) => {
   const [openSideMenu, setOpenSideMenu] = useState(false);
 
   return (
-    <div className='bg-slate-100'>
+    <div className='bg-gray-100'>
       <div className={`flex min-h-screen ${openSideMenu ? 'bg-opacity-30 backdrop-blur-sm' : ''}`}>
         {/* Sidebar Component */}
         <Sidebar isOpen={openSideMenu} setIsOpen={setOpenSideMenu} />
@@ -17,7 +17,7 @@ const DashboardLayout = ({ children}) => {
           <Navbar setOpenSideMenu={setOpenSideMenu} openSideMenu={openSideMenu} />
           
           {/* Main Body */}
-          <main className="p-1 not-sm:p-3 lg:mr-3 sm:mr-2 sm:ml-2 flex-1">{children}</main>
+          <main className="p-1 lg:mr-3 sm:mr-2 sm:ml-2 not-sm:mx-2 flex-1">{children}</main>
         </div>
       </div>
     </div>

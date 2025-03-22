@@ -9,7 +9,10 @@ import InfoCard from '../../components/Cards/InfoCard';
 import { LuHandCoins , LuWalletMinimal } from "react-icons/lu";
 import { FaHome, FaWallet, FaChartBar } from 'react-icons/fa'; 
 import { IoMdCard } from "react-icons/io";
+import { BiSolidBank } from "react-icons/bi";
 import { addThousandSeparator } from '../../utils/helper';
+import RecentTransactions from '../../components/Dashboard/RecentTransactions';
+import FinanceOverview from '../../components/Dashboard/FinanceOverview';
 
 const Home = () => {
   useUserAuth();
@@ -52,25 +55,45 @@ const Home = () => {
   return (
     <DashboardLayout activeMenu="Dashboard">
       <div className='my-5 mx-auto'>
-        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 transition-all ease-in-out duration-500'>
-          <InfoCard 
-            icon = {<IoMdCard/>}
-            label = "Total Balance"
-            value = {addThousandSeparator(dashboardData?.totalBalance || 0)}
-            color = "bg-primary"
+        <div className='grid lg:grid-cols-3 md:grid-cols-2 gap-6 transition-all ease-in-out duration-500'>
+          <div className='lg:col-span-1 md:col-span-2 '>
+            <InfoCard 
+              icon = {<BiSolidBank />}
+              label = "Total Balance"
+              value = {addThousandSeparator(dashboardData?.totalBalance || 0)}
+              color = "bg-primary"
+            />
+          </div>
+          <div className='col-span-1'>
+            <InfoCard 
+              icon = {<FaWallet/>}
+              label = "Total Income"
+              value = {addThousandSeparator(dashboardData?.totalIncome || 0)}
+              color = "bg-green-700"
+            />
+          </div>
+          <div className='col-span-1'>
+            <InfoCard 
+              icon = {<FaChartBar/>}
+              label = "Total Expense"
+              value = {addThousandSeparator(dashboardData?.totalExpense || 0)}
+              color = "bg-red-600"
+            />
+          </div>
+        </div>
+
+        <div className='grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6'>
+          <RecentTransactions 
+            transactions = {dashboardData?.recentTransactions}
+            onSeeMore = {() => navigate('/expense')}
           />
-          <InfoCard 
-            icon = {<IoMdCard/>}
-            label = "Total Income"
-            value = {addThousandSeparator(dashboardData?.totalIncome || 0)}
-            color = "bg-green-600"
+
+          <FinanceOverview 
+            totalBalance = {dashboardData?.totalBalance || 0}
+            totalIncome = {dashboardData?.totalIncome || 0}
+            totalExpense = {dashboardData?.totalExpense || 0}
           />
-          <InfoCard 
-            icon = {<IoMdCard/>}
-            label = "Total Expense"
-            value = {addThousandSeparator(dashboardData?.totalExpense || 0)}
-            color = "bg-red-600"
-          />
+
         </div>
       </div>
     </DashboardLayout>

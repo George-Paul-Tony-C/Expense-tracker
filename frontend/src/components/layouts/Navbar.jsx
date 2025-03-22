@@ -6,7 +6,7 @@ import { HiOutlineX, HiOutlineMenu } from 'react-icons/hi';
 const Navbar = ({ setOpenSideMenu, openSideMenu }) => {
   return (
     <nav
-      className={`my-3 md:ml-0 mr-3 not-sm:ml-3 sm:ml-3 rounded-2xl flex gap-5 backdrop-blur-2xl bg-white shadow-md shadow-gray-200 border border-gray-200/50 py-4 px-7 sticky top-0 z-30 ${
+      className={`my-3 md:ml-0 mr-3 not-sm:ml-3 sm:ml-3 rounded-2xl flex gap-5 backdrop-blur-2xl bg-white shadow-md shadow-gray-200 border border-gray-200/50 py-4 px-7 sticky top-3 z-30 ${
         openSideMenu ? 'opacity-50 backdrop-blur-md' : ''
       }`}
     >
