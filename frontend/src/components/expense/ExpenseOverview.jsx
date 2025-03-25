@@ -2,7 +2,8 @@ import { LuPlus } from 'react-icons/lu'
 import CustomBarChart from '../Charts/CustomBarChart'
 import React , { useEffect, useState } from 'react'
 import { prepareExpenseBarChartData } from '../../utils/helper';
-import CustomLineChart from '../Charts/CustomLineChart';
+
+import CustomAreaChart from '../Charts/CustomAreaChart';
 
 const ExpenseOverview = ({transactions , onAddExpense}) => {
 
@@ -30,7 +31,7 @@ const ExpenseOverview = ({transactions , onAddExpense}) => {
         </div>
 
         <div className='mt-10'>
-        <CustomLineChart data={chartData} type={"expense"} />
+        <CustomAreaChart data={chartData} type={"expense"} />
         </div>
     </div>
   )

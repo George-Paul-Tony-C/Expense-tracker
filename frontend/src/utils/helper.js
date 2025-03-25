@@ -19,7 +19,10 @@ export const addThousandSeparator = (num) => {
 };
 
 export const prepareExpenseBarChartData = (data = []) => {
-    const chartData = data.map((item) => ({
+
+    const sortedData = [...data].sort((a,b) => new Date(a.date) - new Date(b.date));
+
+    const chartData = sortedData.map((item) => ({
         month : moment(item?.date).format("Do MMM"),
         category: item?.category,
         amount : item?.amount,
