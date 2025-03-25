@@ -7,6 +7,7 @@ import axiosInstance from '../../utils/axiosInstance';
 import { API_PATHS } from '../../utils/apiPaths';
 import { useContext } from 'react';
 import { UserContext } from '../../context/userContext';
+import Tooltip from '@mui/material/Tooltip'; // Import Tooltip
 
 const UserInfo = () => {
   const [user, setUser] = useState(null);
@@ -28,7 +29,6 @@ const UserInfo = () => {
             try {
                 const res = await axiosInstance.get(API_PATHS.AUTH.GET_USER_INFO);
                 setUser(res.data);
-                localStorage.setItem("user", JSON.stringify(res.data)); // Save fetched user data
             } catch (err) {
                 setError(err.response?.data?.message || 'Failed to load user data');
                 navigate('/login');
@@ -39,8 +39,6 @@ const UserInfo = () => {
         fetchUser();
     }
   }, [navigate]);
-
-
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -70,27 +68,39 @@ const UserInfo = () => {
 
   return (
     <AuthLayout>
-      <div className="max-w-3xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
-        <button className='hover:scale-105' onClick={() => navigate('/dashboard')}>
-          <TbLayoutDashboardFilled size={30} />
-        </button>
+      <div className="max-w-4xl mx-auto mt-12 p-8 bg-white shadow-xl rounded-lg">
+        {/* Dashboard Button with Tooltip */}
+        <Tooltip title="Go to Dashboard" arrow> {/* Tooltip added here */}
+          <button
+            className="top-6 right-6 text-gray-700 hover:text-blue-500 transition"
+            onClick={() => navigate('/dashboard')}
+          >
+            <TbLayoutDashboardFilled size={28} />
+          </button>
+        </Tooltip>
 
-        <div className="flex flex-col items-center mt-4">
+        <div className="flex flex-col items-center space-y-6">
+          {/* Profile Image */}
           {user?.profileImageUrl ? (
             <img
               src={user.profileImageUrl}
               alt="Profile"
-              className="w-32 h-32 rounded-full object-cover border-2 border-gray-300"
+              className="w-36 h-36 rounded-full object-cover border-4 border-gray-200 shadow-lg"
             />
           ) : (
-            <div className="w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center text-gray-500">
+            <div className="w-36 h-36 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 text-xl">
               No Image
             </div>
           )}
-          <h3 className="mt-4 text-3xl font-bold text-gray-800">{user?.fullName}</h3>
-          <p className="text-lg text-gray-600">{user?.email}</p>
+          
+          {/* User Info */}
+          <div className="text-center">
+            <h3 className="text-4xl font-semibold text-gray-800">{user?.fullName}</h3>
+            <p className="text-xl text-gray-600">{user?.email}</p>
+          </div>
         </div>
 
+        {/* Account Details */}
         <div className="mt-8 border-t pt-6">
           <h4 className="text-2xl font-semibold text-gray-700 mb-4">Account Details</h4>
           <p className="text-gray-600">
@@ -98,13 +108,14 @@ const UserInfo = () => {
           </p>
         </div>
 
-        <div className="mt-8 flex justify-end space-x-4">
-          <button className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+        {/* Action Buttons */}
+        <div className="mt-8 flex justify-between space-x-6">
+          <button className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200">
             Edit Profile
           </button>
           <button
             onClick={handleLogout}
-            className="px-6 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition"
+            className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-200"
           >
             Logout
           </button>

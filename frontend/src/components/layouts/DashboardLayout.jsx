@@ -6,13 +6,13 @@ const DashboardLayout = ({ children}) => {
   const [openSideMenu, setOpenSideMenu] = useState(false);
 
   return (
-    <div className='bg-gray-100'>
+    <div className='bg-sky-50'>
       <div className={`flex min-h-screen ${openSideMenu ? 'bg-opacity-30 backdrop-blur-sm' : ''}`}>
         {/* Sidebar Component */}
         <Sidebar isOpen={openSideMenu} setIsOpen={setOpenSideMenu} />
         
         {/* Main Content */}
-        <div className={`flex-1 flex flex-col lg:ml-64 md:ml-64 transition-all duration-300 ${openSideMenu ? 'opacity-50' : ''}`}>
+        <div className={`flex-1 flex md:ml-64 flex-col transition-all duration-300 ${openSideMenu ? 'opacity-50' : ''}`}>
           {/* Navbar Component */}
           <Navbar setOpenSideMenu={setOpenSideMenu} openSideMenu={openSideMenu} />
           

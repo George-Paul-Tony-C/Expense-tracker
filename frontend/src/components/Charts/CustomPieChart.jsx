@@ -8,6 +8,8 @@ import {
     ResponsiveContainer,
     Legend,
 } from "recharts";
+import CustomTooltip from './CustomTooltip';
+import CustomLegend from './CustomLegend';
 
 const CustomPieChart = ({data,label,totalAmount,colors,showTextAnchor}) => {
   return (
@@ -27,35 +29,38 @@ const CustomPieChart = ({data,label,totalAmount,colors,showTextAnchor}) => {
                 <Cell key={`cell-${index}`} fill={colors[index % colors.length]}/>
             ))}
         </Pie>
-        <Tooltip />
-        <Legend />
+        <Tooltip content={CustomTooltip}/>
 
-        { showTextAnchor && (
-            <>
-                <text
-                    x = "50%"
-                    y = "50%"
-                    dy={-25}
-                    textAnchor='middle'
-                    fill='#666'
-                    fontSize="14px"
-                    >
-                    {label}
-                </text>
-                <text
-                    x = "50%"
-                    y = "50%"
-                    dy={8}
-                    textAnchor='#333'
-                    fontWeight="semi-bold"
-                    >
-                    {totalAmount}
-                </text>
-            </>
-        )}
+        {showTextAnchor && (
+          <g>
+            <text
+              x = "50%"
+              y = "50%"
+              dy={-25}
+              textAnchor="middle"
+              fill='#666'
+              fontSize="14px"
+            >
+              {label}
+            </text>
+            <text
+              x = "50%"
+              y = "50%"
+              dy={8}
+              textAnchor="middle"
+              fill='#333'
+              fontSize="24px"
+              fontWeight="semi-bold"
+            >
+              {totalAmount}
+            </text>
+          </g>
+        )};
         
 
-        </PieChart>
+        <Legend content={CustomLegend}/>
+
+      </PieChart>
     </ResponsiveContainer>
   )
 }

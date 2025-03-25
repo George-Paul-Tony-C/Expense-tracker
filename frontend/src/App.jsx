@@ -1,5 +1,4 @@
-import './App.css';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import Login from './pages/Auth/Login';
 import SignUp from './pages/Auth/SignUp';
 import Home from './pages/Dashboard/Home';
@@ -8,6 +7,24 @@ import Income from './pages/Dashboard/Income';
 import UserProvider from './context/userContext';
 import ProtectedRoute from './ProtectedRoute';  // Import the new component
 import UserInfo from './pages/Auth/UserInfo';
+import { useEffect } from 'react';
+import { ToastContainer } from 'react-toastify';
+
+
+const Root = () => {
+  const isAuthenticated = !!localStorage.getItem("token");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/dashboard');
+    } else {
+      navigate('/login');
+    }
+  }, [isAuthenticated, navigate]); // Add dependencies to ensure navigation is handled properly
+
+  return null; // No UI is needed for this component, as it's just redirecting
+};
 
 function App() {
   return (
@@ -17,7 +34,7 @@ function App() {
           {/* Public Routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/signUp" element={<SignUp />} />
-          <Route path="/" element={<Navigate to="/login" />} />
+          <Route path="/" element={<Root/>} />
 
           {/* Protected Routes (Only accessible if logged in) */}
           <Route element={<ProtectedRoute />}>
@@ -28,6 +45,17 @@ function App() {
           </Route>
         </Routes>
       </Router>
+
+      <ToastContainer
+        toastOptions={{
+          className: 'p-4',
+          style: {
+            background: '#333',
+            color: '#fff',
+            fontSize: '13px',
+          },
+        }}
+      />
     </UserProvider>
   );
 }
